@@ -17,7 +17,7 @@ setuptools.setup(
         'numpy',
         'scipy',
         'plyfile',
-        'mayavi',
+#        'mayavi',
         'numba'
     ],
     classifiers=[

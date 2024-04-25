@@ -1,9 +1,9 @@
-from mayavi import mlab
 import argparse
 import sys
+import pyvista
 import numpy as np
 
-from EMS.utilities import read_ply, showPoints
+from EMS.utilities import read_ply
 from EMS.EMS_recovery import EMS_recovery
 
 import timeit
@@ -14,8 +14,8 @@ def main(argv):
         description='Probabilistic Recovery of a superquadric surface from a point cloud file *.ply.')
 
     parser.add_argument(
-        'path_to_data',
-        # default = '~/EMS-probabilistic_superquadric_fitting/MATLAB/example_scripts/data/noisy_pointCloud_example_1.ply',
+        '--path_to_data',
+        default='EMS-superquadric_fitting/MATLAB/example_scripts/data/multi_superquadrics/dog.ply',
         help='Path to the directory containing the point cloud file *.ply.'
     )
 
@@ -60,7 +60,7 @@ def main(argv):
     parser.add_argument(
         '--pointSize',
         type = float,
-        default = 0.1,       
+        default = 3,       
         help='Set the point size for plotting the point cloud. Default is 0.2.'
     )
 
@@ -94,10 +94,14 @@ def main(argv):
         print('----------------------------------------------------')
     
     if args.visualize is True:
-        fig = mlab.figure(size=(400, 400), bgcolor=(1, 1, 1))
-        sq_recovered.showSuperquadric(arclength = args.arcLength)
-        showPoints(point, scale_factor=args.pointSize)
-        mlab.show()
+        # fig = mlab.figure(size=(400, 400), bgcolor=(1, 1, 1))
+        # showPoints(point, scale_factor=args.pointSize)
+        # mlab.show()
+        plotter = pyvista.Plotter()
+        grid = sq_recovered.showSuperquadric(arclength = args.arcLength)
+        plotter.add_mesh(grid, color=np.random.rand(3), opacity=0.8)
+        plotter.add_points(point, color='r', point_size=args.pointSize)
+        plotter.show()
 
 
 if __name__ == "__main__":

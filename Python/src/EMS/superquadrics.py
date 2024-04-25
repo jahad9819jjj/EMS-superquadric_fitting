@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.spatial.transform import Rotation as R
 import EMS.utilities
+import pyvista
 
 class superquadric(object):
     # a class object specifies a superquadric primitive with a general pose.
@@ -15,6 +16,7 @@ class superquadric(object):
         self.scale = scale_vec
         self.euler = euler_vec
         self.translation = translation
+        self.plotter = pyvista.Plotter()
 
     @property
     def shape(self):
@@ -65,8 +67,8 @@ class superquadric(object):
         self._r = R.from_quat(val)
 
     def showSuperquadric(self, threshold = 1e-2, num_limit = 10000, arclength = 0.02):
-        EMS.utilities.showSuperquadrics(self, threshold = threshold, num_limit = num_limit, arclength = arclength)
-
+        grid = EMS.utilities.showSuperquadrics(self, threshold = threshold, num_limit = num_limit, arclength = arclength)
+        return grid
 
 class rotations(object):
     def __init__(self):

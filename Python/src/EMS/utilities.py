@@ -1,8 +1,12 @@
 from mayavi import mlab
 import numpy as np
 import plyfile
+import pyvista
 
-def showSuperquadrics(x, threshold = 1e-2, num_limit = 10000, arclength = 0.02):
+
+def showSuperquadrics(x, threshold = 1e-2, num_limit = 10000, arclength = 0.02, 
+                    #   plotter=None
+                      ):
     # avoid numerical instability in sampling
     if x.shape[0] < 0.007:
         x.shape[0] = 0.007
@@ -28,9 +32,8 @@ def showSuperquadrics(x, threshold = 1e-2, num_limit = 10000, arclength = 0.02):
             y_mesh[m, n] = point_temp[1]
             z_mesh[m, n] = point_temp[2]
     
-    mlab.view(azimuth=0.0, elevation=0.0, distance=2)
-    mlab.mesh(x_mesh, y_mesh, z_mesh, color=(0, 0, 1), opacity=0.8)
-
+    grid = pyvista.StructuredGrid(x_mesh, y_mesh, z_mesh)
+    return grid
 
 
 def uniformSampledSuperellipse(epsilon, scale, threshold = 1e-2, num_limit = 10000, arclength = 0.02):
