@@ -2,6 +2,7 @@ import argparse
 import sys
 import pyvista
 import numpy as np
+import open3d as o3d
 
 from EMS.utilities import read_ply
 from EMS.EMS_recovery import EMS_recovery
@@ -68,7 +69,8 @@ def main(argv):
     
     print('----------------------------------------------------')
     print('Loading point cloud from: ', args.path_to_data, '...')
-    point = read_ply(args.path_to_data)
+    point_cloud = o3d.io.read_point_cloud(args.path_to_data)
+    point = np.asarray(point_cloud.points)
     print('Point cloud loaded.')
     print('----------------------------------------------------')
 

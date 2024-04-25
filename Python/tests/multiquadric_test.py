@@ -3,6 +3,7 @@ from EMS.EMS_recovery import EMS_recovery
 from EMS.utilities import read_ply
 from sklearn.cluster import DBSCAN
 import pyvista
+import open3d as o3d
 
 def hierarchical_ems(
     point,
@@ -59,14 +60,15 @@ def hierarchical_ems(
 
 
 # Load pointcloud 
-point_cloud = read_ply("EMS-superquadric_fitting/MATLAB/example_scripts/data/multi_superquadrics/dog.ply")
-point_seg, point_outlier, list_quadrics = hierarchical_ems(point_cloud)
-
+point_cloud = o3d.io.read_point_cloud("EMS-superquadric_fitting/MATLAB/example_scripts/data/multi_superquadrics/dog.ply")
+point_cloud = np.asarray(point_cloud.points)
+point_seg, point_outlier, list_quadrics = hierarchical_ems(point_cloud, Eps=0.1)
 # -----------    Plot multiquadric figure --------------
 plotter = pyvista.Plotter()
 for quadric in list_quadrics:
     grid = quadric.showSuperquadric(arclength=0.2)
     plotter.add_mesh(grid, color=np.random.rand(3), opacity=0.8)
     
-plotter.add_points(point_cloud, color='r', point_size=3)
+plotter.add_points(point_cloud, color='g', point_size=2)
+plotter.add_points(point_seg[0][0], color='r', point_size=3)
 plotter.show()
